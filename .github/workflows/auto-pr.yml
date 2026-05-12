@@ -25,7 +25,7 @@ jobs:
         with:
           token: ${{ secrets.PAT_TOKEN }}
           base: develop
-          branch: ${{ github.ref_name }}
+          branch: pr/${{ github.ref_name }}
           title: "PR: ${{ github.ref_name }}"
           body: "PR créée automatiquement"
 

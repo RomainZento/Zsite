@@ -30,7 +30,7 @@ jobs:
           body: "PR créée automatiquement"
 
       - name: Send email
-        uses: dawidd6/action-send-mail@v3
+        uses: dawidd6/action-send-mail@v4
         with:
           server_address: smtp.gmail.com
           server_port: 465

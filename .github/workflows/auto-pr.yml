@@ -28,7 +28,6 @@ jobs:
           branch: pr/${{ github.ref_name }}
           title: "PR: ${{ github.ref_name }}"
           body: "PR créée automatiquement"
-          rebase: false
 
       - name: Send email
         uses: dawidd6/action-send-mail@v4

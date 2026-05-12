@@ -17,7 +17,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # On récupère tout l'historique pour permettre la comparaison avec 'develop'
+          fetch-depth: 0
+          # On s'assure d'être sur la branche qui a déclenché le push
+          ref: ${{ github.ref_name }}
 
       - name: Create Pull Request
         id: cpr
@@ -25,24 +31,29 @@ jobs:
         with:
           token: ${{ secrets.PAT_TOKEN }}
           base: develop
-          branch: pr/${{ github.ref_name }}
+          # Utilisation d'un nom de branche unique pour la PR
+          branch: pr-automated-${{ github.ref_name }}
           title: "PR: ${{ github.ref_name }}"
-          body: "PR créée automatiquement"
+          body: "PR créée automatiquement suite au push sur ${{ github.ref_name }}"
+          commit-message: "docs: automated PR creation"
 
       - name: Send email
+        # On n'envoie le mail QUE si une PR a été créée ou modifiée
+        if: steps.cpr.outputs.pull-request-operation != 'none'
         uses: dawidd6/action-send-mail@v4
         with:
           server_address: smtp.gmail.com
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: Nouvelle PR à valider
+          subject: Nouvelle PR à valider - ${{ github.ref_name }}
           to: ${{ secrets.MAIL_USERNAME }}
           from: GitHub Actions
           body: |
-            Une PR a été créée.
+            Une Pull Request a été générée automatiquement.
 
-            Branche: ${{ github.ref_name }}
+            Branche source : ${{ github.ref_name }}
+            Branche cible : develop
 
-            URL:
+            Lien de la PR :
             ${{ steps.cpr.outputs.pull-request-url }}

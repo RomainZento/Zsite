@@ -3,7 +3,14 @@ name: Auto PR + Notification
 on:
   push:
     branches:
-      - 'feature/**'
+      - 'features/**'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   create-pr:
@@ -14,23 +21,24 @@ jobs:
 
       - name: Create Pull Request
         id: cpr
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
           base: develop
-          branch: ${{ github.ref_name }}
+          branch: pr/${{ github.ref_name }}
           title: "PR: ${{ github.ref_name }}"
           body: "PR créée automatiquement"
+          rebase: false
 
       - name: Send email
-        uses: dawidd6/action-send-mail@v3
+        uses: dawidd6/action-send-mail@v4
         with:
           server_address: smtp.gmail.com
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: Nouvelle PR à valider
-          to: tonmail@gmail.com
+          to: ${{ secrets.MAIL_USERNAME }}
           from: GitHub Actions
           body: |
             Une PR a été créée.

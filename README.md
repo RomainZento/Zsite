@@ -1,6 +1,5 @@
 # Zsite
 
-
 ### GitHub Actions
 add on your projet , the secret MAIL_PASSWORD and MAIL_USERNAME for the email sending
 

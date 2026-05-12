@@ -30,7 +30,7 @@ jobs:
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: Nouvelle PR à valider
-          to: tonmail@gmail.com
+          to: ${{ secrets.MAIL_USERNAME }}
           from: GitHub Actions
           body: |
             Une PR a été créée.

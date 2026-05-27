@@ -41,7 +41,7 @@ jobs:
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: Nouvelle PR à valider - ${{ github.ref_name }}
-          to: ${{ secrets.MAIL_USERNAME }}
+          to: ${{ secrets.MAIL_TO }}
           from: GitHub Actions
           body: |
             Une Pull Request est prête pour revue.
